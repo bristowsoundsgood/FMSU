@@ -145,7 +145,10 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     transientShaper.update(attack, sustain);
     transientShaper.process(buffer);
 
-    // softClipper.process()
+    const float softClipGain { _params.getSoftClipGain() };
+    softClipper.update(softClipGain);
+    softClipper.process(buffer);
+
     // hardClipper.process()
     // texture.process()
     // expansion.process()

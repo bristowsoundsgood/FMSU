@@ -38,7 +38,7 @@ void TransientShaperDSP::process(juce::AudioBuffer<float>& buffer)
     // === TRANSIENT SHAPING CODE === //
     float* leftChannel = buffer.getWritePointer(0);
     float* rightChannel = buffer.getWritePointer(1);
-    const float numSamples = buffer.getNumSamples();
+    const int numSamples = buffer.getNumSamples();
 
     for (int i = 0; i < numSamples; ++i)
     {

@@ -3,6 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include "PluginParameters.h"
+#include "DSP/SoftClipperDSP.h"
 #include "DSP/TransientShaperDSP.h"
 
 //==============================================================================
@@ -49,9 +50,8 @@ private:
     juce::AudioProcessorValueTreeState _stateManager;
 
     TransientShaperDSP transientShaper {};
+    SoftClipperDSP softClipper{};
 
-    EnvelopeFollower _envelopeSlow {};
-    EnvelopeFollower _envelopeFast {};
     PluginParameters _params;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
