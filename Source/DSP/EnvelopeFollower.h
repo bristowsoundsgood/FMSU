@@ -5,26 +5,25 @@
 #ifndef FMSU_ENVELOPE1_H
 #define FMSU_ENVELOPE1_H
 
+// https://www.musicdsp.org/en/latest/Filters/265-output-limiter-using-envelope-follower-in-c.html
 
 class EnvelopeFollower
 {
 public:
+    EnvelopeFollower();
     void prepare(float sampleRate);
     float process(float sample);
 
     void setAttack(float milliseconds);
-    void setSustain(float milliseconds);
-
-    float convertToScale(float milliseconds);
+    void setRelease(float milliseconds);
 
 private:
+    float _envelope {};
+    float _attack {};
+    float _release {};
+    float _sampleRate {};
 
-    // 'Attack' and 'Sustain' are multipliers that scale the transient/body of a signal, respectively.
-    float _attack {0.0f};
-    float _sustain {0.0f};
-
-    float _envelope {0.0f};
-    float _sampleRate {0.0f};
+    [[nodiscard]] float _convertToScalarMultiplier(float milliseconds) const;
 };
 
 

@@ -31,6 +31,9 @@
 *.out
 *.app
 
+# AudioPluginHost sessions
+*.filtergraph
+
 .DS_Store
 .idea/
 Build/

@@ -3,7 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include "PluginParameters.h"
-#include "DSP/EnvelopeFollower.h"
+#include "DSP/TransientShaperDSP.h"
 
 //==============================================================================
 class AudioPluginAudioProcessor final : public juce::AudioProcessor
@@ -48,7 +48,7 @@ public:
 private:
     juce::AudioProcessorValueTreeState _stateManager;
 
-    juce::AudioSampleBuffer _wet, _dry, _rectifiedSlow, _rectifiedFast;
+    TransientShaperDSP transientShaper {};
 
     EnvelopeFollower _envelopeSlow {};
     EnvelopeFollower _envelopeFast {};

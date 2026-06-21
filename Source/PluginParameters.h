@@ -11,7 +11,7 @@ namespace PluginConfig
     const juce::ParameterID attackParamID { "attack", 1 };
     const juce::String attackParamName { "attack" };
     constexpr float attackMin { 0.0f };
-    constexpr float attackMax { 1.0f };
+    constexpr float attackMax { 10.0f };
     constexpr float attackDefault { 0.0f };
     constexpr float attackStep { 0.01f };
     const juce::NormalisableRange attackRange { attackMin, attackMax, attackStep };

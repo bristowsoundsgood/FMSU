@@ -37,6 +37,8 @@ set(SourceFiles
         Source/PluginParameters.h
         Source/DSP/EnvelopeFollower.cpp
         Source/DSP/EnvelopeFollower.h
+        Source/DSP/TransientShaperDSP.h
+        Source/DSP/TransientShaperDSP.cpp
 )
 
 # Change these to your own preferences

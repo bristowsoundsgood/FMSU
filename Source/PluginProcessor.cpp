@@ -91,7 +91,7 @@ void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     // initialisation that you need..
     juce::ignoreUnused (sampleRate, samplesPerBlock);
 
-    _envelopeSlow.prepare(static_cast<float>(sampleRate));
+    transientShaper.prepare(static_cast<float>(sampleRate));
 }
 
 void AudioPluginAudioProcessor::releaseResources()
@@ -132,7 +132,6 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     juce::ScopedNoDenormals noDenormals;
     const auto totalNumInputChannels  = getTotalNumInputChannels();
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
-    const auto numSamples = buffer.getNumSamples();
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -143,61 +142,13 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     const float attack { _params.getAttack() };
     const float sustain { _params.getSustain() };
 
-    // Set params
-    if (attack >= 0)
-    {
-        _envelopeSlow.setAttack(20.0f);
-        _envelopeSlow.setSustain(sustain);
+    transientShaper.update(attack, sustain);
+    transientShaper.process(buffer);
 
-        _envelopeFast.setAttack(0.0f);
-        _envelopeFast.setSustain(sustain);
-    }
-
-    else
-    {
-        _envelopeSlow.setAttack(0.0f);
-        _envelopeSlow.setSustain(sustain);
-
-        _envelopeFast.setAttack(0.0f);
-        _envelopeFast.setSustain(sustain / 5);
-    }
-
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        float* channelData = buffer.getWritePointer(channel);
-
-        for (int sample = 0; sample < numSamples; ++sample)
-        {
-            const float original = channelData[sample];
-
-            // fast/slow envelopes
-            const float fast = _envelopeFast.process(original);
-            const float slow = _envelopeSlow.process(original);
-
-            // detect transient, use it to enable a coefficient
-            const float difference = fast - slow;
-            float coefficient {};
-
-            if (difference > 0.0f)
-            {
-                coefficient = 1 * _params.getAttack();
-            }
-            else if (difference < 0.0f)
-            {
-                coefficient = 0;
-            }
-
-            // gain curve! envelope * attack/snap, exponential envelope, envelope becomes an exponent, not a multiplier
-            // gives a snappier sound, as the curve rapidly steeps and therefore suits the desired goal of punch
-            // louder the transient, the more aggressive the output
-            float processed = ((original * powf(2.f, coefficient) - original)) * 2;
-
-            // blend dry/wet
-            channelData[sample] = processed + original;
-        }
-    }
-
-
+    // softClipper.process()
+    // hardClipper.process()
+    // texture.process()
+    // expansion.process()
 }
 
 //==============================================================================
