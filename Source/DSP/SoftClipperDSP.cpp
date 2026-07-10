@@ -31,8 +31,8 @@ void SoftClipperDSP::process(juce::AudioBuffer<float>& buffer)
 float SoftClipperDSP::_applyCubicNonlinearity(const float x)
 {
     if (x <= -1.0f) return -2.0f / 3.0f;
-    else if (x < 1.0f) return x - (x * x * x) / 3.0f;
-    else return 2.0f / 3.0f;
+    if (x < 1.0f) return x - (x * x * x) / 3.0f;
+    return 2.0f / 3.0f;
 }
 
 float SoftClipperDSP::_applyGain(const float x) const

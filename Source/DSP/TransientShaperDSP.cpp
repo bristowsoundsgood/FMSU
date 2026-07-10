@@ -9,7 +9,7 @@ void TransientShaperDSP::update(const float attack, const float sustain)
 {
     // === ENVELOPE PREP ===
     // if attack, then we want to apply transient boosting
-    // n.b. attack can be negative to apply transient attenuation
+    // n.b. attack can be negative to apply transient attenuation, but it is not a requirement of this plugin.
     if (attack > 0.0f)
     {
         // the attack is not being used to set the attack of the envelope follower, it governs whether the fast envelope is looking for a transient
@@ -48,23 +48,27 @@ void TransientShaperDSP::process(juce::AudioBuffer<float>& buffer)
         // rectify
         controlSignal = fabsf(controlSignal);
 
-        // get envelopes
+        // difference > 0 : transient detected. difference <= 0 : body detected.
         const float fastEnvelope = _envelopeFast.process(controlSignal);
         const float slowEnvelope = _envelopeSlow.process(controlSignal);
-
         float difference = fastEnvelope - slowEnvelope;
-
-        constexpr float k = 2.0f;
 
         if (difference <= 0.0f)
         {
             difference = 0.0f;
+            // do something here for processing the sustaing
         }
 
+        constexpr float k = 5.0f;
         const float gainCoefficient = 1.0f + (k * difference);
         leftChannel[i] = leftChannel[i] * gainCoefficient;
         rightChannel[i] = rightChannel[i] * gainCoefficient;
     }
+
+    // sustain circuit:
+    // - if sustain is negative, then apply attenuation to the body.
+    // - if sustain is positive, then apply boosting to the body.
+
 }
 
 void TransientShaperDSP::prepare(const float sampleRate)
