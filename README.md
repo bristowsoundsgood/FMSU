@@ -1,1 +1,1 @@
-# F___ MY S___ UP
+# F MY S___ UP
