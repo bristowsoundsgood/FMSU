@@ -5,18 +5,24 @@
 #include "TransientShaperDSP.h"
 #include <juce_audio_basics/juce_audio_basics.h>
 
+/*
+ * - Detect body of a signal (difference <= 0.0f)
+ * - Use _sustain value to modulate the gain parameter applied to the body
+ */
+
 void TransientShaperDSP::prepare(const float sampleRate)
 {
-    // Built-in envelope followers.
-    // The difference between them (fast - slow) is used to detect a transient (positive difference) or body (0 or negative difference).
-    _envelopeFast.prepare(sampleRate);
-    _envelopeSlow.prepare(sampleRate);
+    _signalEnvelope.prepare(sampleRate);
+    _signalEnvelope.setAttack(0.0f);
+    _signalEnvelope.setRelease(20.0f);
 
-    _envelopeFast.setAttack(0.0f);
-    _envelopeFast.setRelease(20.0f);
+    _bodyEnvelope.prepare(sampleRate);
+    _bodyEnvelope.setAttack(20.0f);
+    _bodyEnvelope.setRelease(20.0f);
 
-    _envelopeSlow.setAttack(20.0f);
-    _envelopeSlow.setRelease(20.0f);
+    _sustainEnvelope.prepare(sampleRate);
+    _sustainEnvelope.setAttack(0.0f);
+    _sustainEnvelope.setRelease(500.0f);
 }
 
 void TransientShaperDSP::update(const float attack, const float sustain)
@@ -28,34 +34,41 @@ void TransientShaperDSP::update(const float attack, const float sustain)
 
 void TransientShaperDSP::process(juce::AudioBuffer<float>& buffer)
 {
-    // === TRANSIENT SHAPING CODE === //
     float* leftChannel = buffer.getWritePointer(0);
     float* rightChannel = buffer.getWritePointer(1);
     const int numSamples = buffer.getNumSamples();
 
     for (int i = 0; i < numSamples; ++i)
     {
-        // stereo-linked processing
+        // Stereo-linked processing
         float controlSignal = (leftChannel[i] + rightChannel[i]) / 2.0f;
 
-        // rectify
+        // Absolute values enable transient extraction (draws contour of waveform)
         controlSignal = fabsf(controlSignal);
 
-        // difference > 0 : transient detected. difference <= 0 : body detected.
-        const float fastEnvelopeValue = _envelopeFast.process(controlSignal);
-        const float slowEnvelopeValue = _envelopeSlow.process(controlSignal);
-        float difference = fastEnvelopeValue - slowEnvelopeValue;
+        const float signalEnvelopeValue = _signalEnvelope.process(controlSignal);
+        const float bodyEnvelopeValue = _bodyEnvelope.process(controlSignal);
+        const float sustainEnvelopeValue = _sustainEnvelope.process(controlSignal);
 
-        if (difference <= 0.0f)
+        const float attackDifference = signalEnvelopeValue - bodyEnvelopeValue;
+        const float sustainDifference = sustainEnvelopeValue - signalEnvelopeValue;
+
+        // Transient detected
+        if (attackDifference > 0.0f)
         {
-            difference = 0.0f;
-            // do something here for processing the sustain
+            // If the attack is 0, the signal remains unaffected.
+            const float transientCoefficient = 1.0f + (_attack * attackDifference);
+            leftChannel[i] = leftChannel[i] * transientCoefficient;
+            rightChannel[i] = rightChannel[i] * transientCoefficient;
         }
 
-        // If the attack is 0, then the signal remains unaffected.
-        const float gainCoefficient = 1.0f + (_attack * difference);
-        leftChannel[i] = leftChannel[i] * gainCoefficient;
-        rightChannel[i] = rightChannel[i] * gainCoefficient;
+        // Body detected
+        if (sustainDifference > 0.0f)
+        {
+            const float sustainCoefficient = 1.0f + (_sustain * sustainDifference);
+            leftChannel[i] = leftChannel[i] * sustainCoefficient;
+            rightChannel[i] = rightChannel[i] * sustainCoefficient;
+        }
     }
 }
 

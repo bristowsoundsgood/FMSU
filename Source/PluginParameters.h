@@ -19,8 +19,8 @@ namespace PluginConfig
 
     const juce::ParameterID sustainParamID { "sustain", 1 };
     const juce::String sustainParamName { "Sustain" };
-    constexpr float sustainMin { 0.0f };
-    constexpr float sustainMax { 1.0f };
+    constexpr float sustainMin { -10.0f };
+    constexpr float sustainMax { 10.0f };
     constexpr float sustainDefault { 0.0f };
     constexpr float sustainStep { 0.01f };
     const juce::NormalisableRange sustainRange { sustainMin, sustainMax, defaultStep };
