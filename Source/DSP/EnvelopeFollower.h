@@ -17,6 +17,9 @@ public:
     void setAttack(float milliseconds);
     void setRelease(float milliseconds);
 
+    float getAttack();
+    float getRelease();
+
 private:
     float _envelope {};
     float _attack {};

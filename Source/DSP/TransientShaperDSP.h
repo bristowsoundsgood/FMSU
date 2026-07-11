@@ -15,6 +15,8 @@ public:
     void update(float attack, float sustain);
     void process(juce::AudioBuffer<float>& buffer);
 private:
+    float _attack {};
+    float _sustain {};
     EnvelopeFollower _envelopeSlow {};
     EnvelopeFollower _envelopeFast {};
 };

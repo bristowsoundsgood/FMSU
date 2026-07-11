@@ -36,7 +36,6 @@ float EnvelopeFollower::process(float sample)
 
 void EnvelopeFollower::setAttack(const float milliseconds)
 {
-    // convert ms to a scalar value
     _attack = _convertToScalarMultiplier(milliseconds);
 }
 
@@ -47,6 +46,15 @@ void EnvelopeFollower::setRelease(const float milliseconds)
 
 float EnvelopeFollower::_convertToScalarMultiplier(const float milliseconds) const
 {
-    return pow(0.01f, 1.0f / (milliseconds * _sampleRate * 0.001f));
+    return std::pow(0.01f, 1.0f / (milliseconds * _sampleRate * 0.001f));
 }
 
+float EnvelopeFollower::getAttack()
+{
+    return _attack;
+}
+
+float EnvelopeFollower::getRelease()
+{
+    return _release;
+}

@@ -87,8 +87,6 @@ void AudioPluginAudioProcessor::changeProgramName (int index, const juce::String
 //==============================================================================
 void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
     juce::ignoreUnused (sampleRate, samplesPerBlock);
 
     transientShaper.prepare(static_cast<float>(sampleRate));
@@ -145,10 +143,10 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     transientShaper.update(attack, sustain);
     transientShaper.process(buffer);
 
-    const float softClipGain { _params.getSoftClipGain() };
-
-    softClipper.update(softClipGain);
-    softClipper.process(buffer);
+    // const float softClipGain { _params.getSoftClipGain() };
+    //
+    // softClipper.update(softClipGain);
+    // softClipper.process(buffer);
 
 
     // hardClipper.process()

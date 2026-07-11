@@ -3,8 +3,9 @@
 //
 
 #include "SoftClipperDSP.h"
+#include <cmath>
 
-SoftClipperDSP::SoftClipperDSP() : _gainMultiplier(1.0f) {};
+SoftClipperDSP::SoftClipperDSP() : _gainMultiplier(1.0f) {}
 
 void SoftClipperDSP::update(const float gain)
 {
@@ -42,7 +43,7 @@ float SoftClipperDSP::_applyGain(const float x) const
 
 float SoftClipperDSP::_convertDecibelsToLinearUnits(const float gain)
 {
-    return pow<float>(10, gain / 20);
+    return std::powf(10, gain / 20);
 }
 
 
