@@ -3,8 +3,8 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include "PluginParameters.h"
-#include "DSP/SoftClipperDSP.h"
-#include "DSP/TransientShaperDSP.h"
+#include "DSP/SoftClipper.h"
+#include "DSP/TransientShaper.h"
 
 //==============================================================================
 class AudioPluginAudioProcessor final : public juce::AudioProcessor
@@ -49,8 +49,8 @@ public:
 private:
     juce::AudioProcessorValueTreeState _stateManager;
 
-    TransientShaperDSP transientShaper {};
-    SoftClipperDSP softClipper{};
+    TransientShaper transientShaper {};
+    SoftClipper softClipper{};
 
     PluginParameters _params;
     //==============================================================================

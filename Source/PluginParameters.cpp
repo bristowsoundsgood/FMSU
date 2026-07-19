@@ -46,4 +46,3 @@ float PluginParameters::getSoftClipGain() const
 
 
 
-

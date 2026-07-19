@@ -2,17 +2,17 @@
 // Created by Joe on 21/06/2026.
 //
 
-#include "SoftClipperDSP.h"
+#include "SoftClipper.h"
 #include <cmath>
 
-SoftClipperDSP::SoftClipperDSP() : _gainMultiplier(1.0f) {}
+SoftClipper::SoftClipper() : _gainMultiplier(1.0f) {}
 
-void SoftClipperDSP::update(const float gain)
+void SoftClipper::update(const float gain)
 {
     _gainMultiplier = _convertDecibelsToLinearUnits(gain);
 }
 
-void SoftClipperDSP::process(juce::AudioBuffer<float>& buffer)
+void SoftClipper::process(juce::AudioBuffer<float>& buffer)
 {
     const int numSamples = buffer.getNumSamples();
 
@@ -29,19 +29,19 @@ void SoftClipperDSP::process(juce::AudioBuffer<float>& buffer)
     }
 }
 
-float SoftClipperDSP::_applyCubicNonlinearity(const float x)
+float SoftClipper::_applyCubicNonlinearity(const float x)
 {
     if (x <= -1.0f) return -2.0f / 3.0f;
     if (x < 1.0f) return x - (x * x * x) / 3.0f;
     return 2.0f / 3.0f;
 }
 
-float SoftClipperDSP::_applyGain(const float x) const
+float SoftClipper::_applyGain(const float x) const
 {
     return x * _gainMultiplier;
 }
 
-float SoftClipperDSP::_convertDecibelsToLinearUnits(const float gain)
+float SoftClipper::_convertDecibelsToLinearUnits(const float gain)
 {
     return std::powf(10, gain / 20);
 }

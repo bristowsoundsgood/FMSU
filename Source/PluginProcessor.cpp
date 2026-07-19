@@ -148,7 +148,6 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // softClipper.update(softClipGain);
     // softClipper.process(buffer);
 
-
     // hardClipper.process()
     // texture.process()
     // expansion.process()

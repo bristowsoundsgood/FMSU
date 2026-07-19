@@ -9,7 +9,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 // Architecture from: https://spl.audio/en/spl-produkt/transient-designer-4-mk2/
-class TransientShaperDSP
+class TransientShaper
 {
 public:
     void prepare(float sampleRate);
@@ -23,9 +23,16 @@ private:
     EnvelopeFollower _bodyEnvelope {};      // Follows the body of the signal. Slow attack misses transient.
     EnvelopeFollower _sustainEnvelope{};    // Long-sustain envelope. Slow release. Captures transient and an overly-pronounced body.
 
-    // differenceAttack = SignalEnvelope - BodyEnvelope
-    // differenceBody =  SustainEnvelope - SignalEnvelope
-    // These difference values modulate the control signal, used when calculating a gain multiplier for the audio signal.
+    static constexpr float SIGNAL_ENVELOPE_ATTACK = 0.0f;
+    static constexpr float BODY_ENVELOPE_ATTACK = 30.0f;
+    static constexpr float BODY_ENVELOPE_RELEASE = 120.0f;
+
+    /*
+    * The 'attack' value scales attackDifference.
+    * The 'sustain' value scales bodyDifference.
+    * attackDifference = signalEnvelope - bodyEnvelope. Modulates the coefficient used in transient amplification.
+    * bodyDifference = sustainEnvelope - signalEnvelope. Modulates the coefficient used in sustain/body amplification.
+    */
 };
 
 

@@ -7,10 +7,10 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
-class SoftClipperDSP
+class SoftClipper
 {
 public:
-    SoftClipperDSP();
+    SoftClipper();
     void update(float gain);
     void process(juce::AudioBuffer<float>& buffer);
 private:

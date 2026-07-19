@@ -10,6 +10,7 @@ namespace PluginConfig
 {
     constexpr float defaultStep { 0.01f };
 
+    // Min/max values are fine-tuned by ear to prevent artifacts from extreme values.
     const juce::ParameterID attackParamID { "attack", 1 };
     const juce::String attackParamName { "Attack" };
     constexpr float attackMin { 0.0f };
@@ -19,10 +20,10 @@ namespace PluginConfig
 
     const juce::ParameterID sustainParamID { "sustain", 1 };
     const juce::String sustainParamName { "Sustain" };
-    constexpr float sustainMin { -10.0f };
-    constexpr float sustainMax { 10.0f };
+    constexpr float sustainMin { -1.5f };
+    constexpr float sustainMax { 0.0f };
     constexpr float sustainDefault { 0.0f };
-    constexpr float sustainStep { 0.01f };
+    constexpr float sustainStep { 0.001f };
     const juce::NormalisableRange sustainRange { sustainMin, sustainMax, defaultStep };
 
     const juce::ParameterID softClipGainParamID { "softClipGain", 1 };
@@ -38,11 +39,11 @@ class PluginParameters
 {
 public:
     PluginParameters(const juce::AudioProcessorValueTreeState& stateManager);
+    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     float getAttack() const;
     float getSustain() const;
     float getSoftClipGain() const;
 
-    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 private:
     juce::AudioParameterFloat* _attack;
     juce::AudioParameterFloat* _sustain;
