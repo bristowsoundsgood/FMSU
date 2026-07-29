@@ -12,7 +12,7 @@ class SoftClipper
 public:
     SoftClipper();
     void update(float gain);
-    void process(juce::AudioBuffer<float>& buffer);
+    void process(juce::AudioBuffer<float>& buffer, int numSamples);
 private:
     float _applyGain(float x) const;
     float _applyCubicNonlinearity(float x);

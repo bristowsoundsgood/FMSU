@@ -14,7 +14,7 @@ class TransientShaper
 public:
     void prepare(float sampleRate);
     void update(float attack, float sustain);
-    void process(juce::AudioBuffer<float>& buffer);
+    void process(juce::AudioBuffer<float>& buffer, int numSamples);
 private:
     float _attack {};
     float _sustain {};

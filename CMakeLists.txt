@@ -37,10 +37,14 @@ set(SourceFiles
         Source/PluginParameters.h
         Source/DSP/EnvelopeFollower.cpp
         Source/DSP/EnvelopeFollower.h
-        Source/DSP/TransientShaper.h
         Source/DSP/TransientShaper.cpp
-        Source/DSP/SoftClipper.h
+        Source/DSP/TransientShaper.h
         Source/DSP/SoftClipper.cpp
+        Source/DSP/SoftClipper.h
+        Source/DSP/HardClipper.cpp
+        Source/DSP/HardClipper.h
+        Source/DSP/AutoGain.cpp
+        Source/DSP/AutoGain.h
         Source/Consts.h
 )
 

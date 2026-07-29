@@ -9,13 +9,11 @@ SoftClipper::SoftClipper() : _gainMultiplier(1.0f) {}
 
 void SoftClipper::update(const float gain)
 {
-    _gainMultiplier = _convertDecibelsToLinearUnits(gain);
+    _gainMultiplier = juce::Decibels::decibelsToGain(gain);
 }
 
-void SoftClipper::process(juce::AudioBuffer<float>& buffer)
+void SoftClipper::process(juce::AudioBuffer<float>& buffer, const int numSamples)
 {
-    const int numSamples = buffer.getNumSamples();
-
     float* leftChannel = buffer.getWritePointer(0);
     float* rightChannel = buffer.getWritePointer(1);
 
@@ -24,6 +22,7 @@ void SoftClipper::process(juce::AudioBuffer<float>& buffer)
         leftChannel[i] = _applyGain(leftChannel[i]);
         rightChannel[i] = _applyGain(rightChannel[i]);
 
+        // Preserve stereo image: each channel gets the right amount of distortion based on sample amplitude
         leftChannel[i] = _applyCubicNonlinearity(leftChannel[i]);
         rightChannel[i] = _applyCubicNonlinearity(rightChannel[i]);
     }
@@ -40,11 +39,5 @@ float SoftClipper::_applyGain(const float x) const
 {
     return x * _gainMultiplier;
 }
-
-float SoftClipper::_convertDecibelsToLinearUnits(const float gain)
-{
-    return std::powf(10, gain / 20);
-}
-
 
 

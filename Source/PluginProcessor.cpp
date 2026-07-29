@@ -130,6 +130,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     juce::ScopedNoDenormals noDenormals;
     const auto totalNumInputChannels  = getTotalNumInputChannels();
     const auto totalNumOutputChannels = getTotalNumOutputChannels();
+    const auto numSamples = buffer.getNumSamples();
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -139,16 +140,17 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
     const float attack { _params.getAttack() };
     const float sustain { _params.getSustain() };
-
     transientShaper.update(attack, sustain);
-    transientShaper.process(buffer);
+    transientShaper.process(buffer, numSamples);
 
-    // const float softClipGain { _params.getSoftClipGain() };
-    //
-    // softClipper.update(softClipGain);
-    // softClipper.process(buffer);
+    const float softClipGain { _params.getSoftClipGain() };
+    softClipper.update(softClipGain);
+    softClipper.process(buffer, numSamples);
 
-    // hardClipper.process()
+    const float hardClipGain { _params.getSoftClipGain() };
+    hardClipper.update(hardClipGain);
+    hardClipper.process(buffer, numSamples);
+
     // texture.process()
     // expansion.process()
 }

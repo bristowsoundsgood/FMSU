@@ -3,6 +3,8 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include "PluginParameters.h"
+#include "DSP/AutoGain.h"
+#include "DSP/HardClipper.h"
 #include "DSP/SoftClipper.h"
 #include "DSP/TransientShaper.h"
 
@@ -49,8 +51,10 @@ public:
 private:
     juce::AudioProcessorValueTreeState _stateManager;
 
+    AutoGain autoGainUnit {};
     TransientShaper transientShaper {};
-    SoftClipper softClipper{};
+    SoftClipper softClipper {};
+    HardClipper hardClipper {};
 
     PluginParameters _params;
     //==============================================================================
