@@ -36,9 +36,6 @@ void TransientShaper::process(juce::AudioBuffer<float>& buffer, const int numSam
     float* leftChannel = buffer.getWritePointer(0);
     float* rightChannel = buffer.getWritePointer(1);
 
-    // // AutoGain: Measure RMS of input
-    // const float inputRMS = buffer.getRMSLevel(0, 0, numSamples);
-
     // Transient processing
     for (int i = 0; i < numSamples; ++i)
     {
@@ -72,29 +69,6 @@ void TransientShaper::process(juce::AudioBuffer<float>& buffer, const int numSam
             rightChannel[i] = rightChannel[i] * sustainCoefficient;
         }
     }
-
-    //     // AutoGain: Measure RMS of output
-    //     const float outputRMS = buffer.getRMSLevel(0, 0, numSamples);
-    //
-    //     // ...scale output to be RMS-matched (i.e., roughly volume-matched) with the input.
-    //     // This prevents loud transientShaper outputs being interpreted as 'better'
-    //     const float autoGainCoefficient = inputRMS / outputRMS;
-    //     for (int i = 0; i < numSamples; i++)
-    //     {
-    //         const float beforeL = leftChannel[i];
-    //         const float beforeR = rightChannel[i];
-    //
-    //         leftChannel[i] *= autoGainCoefficient;
-    //         rightChannel[i] *= autoGainCoefficient;
-    //
-    //         if (i == numSamples - 1)
-    //         {
-    // std::cout << "beforeL: " << beforeL << " | " << "afterL: " << leftChannel[i] << '\n';
-    // std::cout << "beforeR: " << beforeR << " | " << "afterR: " << rightChannel[i] << '\n';
-    // std::cout << "autoGainCoefficient: " << autoGainCoefficient << '\n';
-    // std::cout << "-------------------------------------------" << '\n';
-    //         }
-// }
 }
 
 

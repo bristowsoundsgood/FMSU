@@ -14,13 +14,13 @@ namespace PluginConfig
     const juce::ParameterID attackParamID { "attack", 1 };
     const juce::String attackParamName { "Attack" };
     constexpr float attackMin { 0.0f };
-    constexpr float attackMax { 5.0f };
+    constexpr float attackMax { 8.0f };
     constexpr float attackDefault { 0.0f };
     const juce::NormalisableRange attackRange { attackMin, attackMax, defaultStep };
 
     const juce::ParameterID sustainParamID { "sustain", 1 };
     const juce::String sustainParamName { "Sustain" };
-    constexpr float sustainMin { -1.5f };
+    constexpr float sustainMin { -2.5f };
     constexpr float sustainMax { 0.0f };
     constexpr float sustainDefault { 0.0f };
     constexpr float sustainStep { 0.001f };
