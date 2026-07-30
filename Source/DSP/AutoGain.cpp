@@ -4,7 +4,7 @@
 
 #include "AutoGain.h"
 
-void AutoGain::readInput(const juce::AudioBuffer<float>& buffer, const int numSamples)
+void AutoGain::readInput(const juce::AudioBuffer<float>& buffer, const size_t numSamples)
 {
     // Get average of signal to avoid biasing one channel over another (autogain should affect both channels equally)
     const float rmsLHS = buffer.getRMSLevel(0, 0, numSamples);
@@ -13,7 +13,7 @@ void AutoGain::readInput(const juce::AudioBuffer<float>& buffer, const int numSa
     _inRMS = (rmsLHS + rmsRHS) / 2.0f;
 }
 
-void AutoGain::readOutput(const juce::AudioBuffer<float>& buffer, const int numSamples)
+void AutoGain::readOutput(const juce::AudioBuffer<float>& buffer, const size_t numSamples)
 {
     // combine signal to avoid bias
     const float rmsLHS = buffer.getRMSLevel(0, 0, numSamples);
@@ -22,7 +22,7 @@ void AutoGain::readOutput(const juce::AudioBuffer<float>& buffer, const int numS
     _outRMS = (rmsLHS + rmsRHS) / 2.0f;
 }
 
-void AutoGain::applyGain(juce::AudioBuffer<float>& buffer, const int numSamples)
+void AutoGain::applyGain(juce::AudioBuffer<float>& buffer, const size_t numSamples)
 {
     const float ratio = _inRMS / _outRMS;
 

@@ -12,9 +12,9 @@
 class AutoGain
 {
 public:
-    void readInput(const juce::AudioBuffer<float>& buffer, int numSamples);
-    void readOutput(const juce::AudioBuffer<float>& buffer, int numSamples);
-    void applyGain(juce::AudioBuffer<float>& buffer, int numSamples);
+    void readInput(const juce::AudioBuffer<float>& buffer, size_t numSamples);
+    void readOutput(const juce::AudioBuffer<float>& buffer, size_t numSamples);
+    void applyGain(juce::AudioBuffer<float>& buffer, size_t numSamples);
 
 private:
     float _inRMS;

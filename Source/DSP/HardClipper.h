@@ -12,7 +12,7 @@ class HardClipper
 public:
     HardClipper();
     void update(float gain);
-    void process(juce::AudioBuffer<float>& buffer, int numSamples);
+    void process(juce::AudioBuffer<float>& buffer, size_t numSamples);
 private:
     float _gainMultiplier;
 

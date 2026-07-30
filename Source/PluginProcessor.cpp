@@ -90,6 +90,7 @@ void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     juce::ignoreUnused (sampleRate, samplesPerBlock);
 
     transientShaper.prepare(static_cast<float>(sampleRate));
+    textureLayer.prepare(static_cast<float>(sampleRate));
 }
 
 void AudioPluginAudioProcessor::releaseResources()
@@ -150,6 +151,8 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     const float hardClipGain { _params.getSoftClipGain() };
     hardClipper.update(hardClipGain);
     hardClipper.process(buffer, numSamples);
+
+    // textureLayer.process(buffer, numSamples);
 
     // texture.process()
     // expansion.process()

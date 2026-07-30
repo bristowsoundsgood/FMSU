@@ -14,12 +14,12 @@ void HardClipper::update(const float gain)
     _gainMultiplier = juce::Decibels::decibelsToGain(gain);
 }
 
-void HardClipper::process(juce::AudioBuffer<float>& buffer, const int numSamples)
+void HardClipper::process(juce::AudioBuffer<float>& buffer, const size_t numSamples)
 {
     float* leftChannel = buffer.getWritePointer(0);
     float* rightChannel = buffer.getWritePointer(1);
 
-    for (int i = 0; i < numSamples; i++)
+    for (size_t i = 0; i < numSamples; ++i)
     {
         leftChannel[i] = _applyGain(leftChannel[i]);
         rightChannel[i] = _applyGain(rightChannel[i]);

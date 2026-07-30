@@ -45,6 +45,8 @@ set(SourceFiles
         Source/DSP/HardClipper.h
         Source/DSP/AutoGain.cpp
         Source/DSP/AutoGain.h
+        Source/DSP/TextureLayer.cpp
+        Source/DSP/TextureLayer.h
         Source/Consts.h
 )
 

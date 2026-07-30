@@ -6,6 +6,7 @@
 #include "DSP/AutoGain.h"
 #include "DSP/HardClipper.h"
 #include "DSP/SoftClipper.h"
+#include "DSP/TextureLayer.h"
 #include "DSP/TransientShaper.h"
 
 //==============================================================================
@@ -55,6 +56,7 @@ private:
     TransientShaper transientShaper {};
     SoftClipper softClipper {};
     HardClipper hardClipper {};
+    TextureLayer textureLayer {};
 
     PluginParameters _params;
     //==============================================================================

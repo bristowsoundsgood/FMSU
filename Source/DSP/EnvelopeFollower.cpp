@@ -3,20 +3,13 @@
 //
 
 #include "EnvelopeFollower.h"
-
 #include <cmath>
-
-EnvelopeFollower::EnvelopeFollower()
-{
-}
 
 void EnvelopeFollower::prepare(const float sampleRate)
 {
     _sampleRate = sampleRate;
 }
 
-
-// do we want to update the reference, or do we want a control signal?
 float EnvelopeFollower::process(float sample)
 {
     sample = fabsf(sample);
@@ -34,14 +27,14 @@ float EnvelopeFollower::process(float sample)
     return _envelope;
 }
 
-void EnvelopeFollower::setAttack(const float milliseconds)
+void EnvelopeFollower::setAttack(const float ms)
 {
-    _attack = _convertToScalarMultiplier(milliseconds);
+    _attack = _convertToScalarMultiplier(ms);
 }
 
-void EnvelopeFollower::setRelease(const float milliseconds)
+void EnvelopeFollower::setRelease(const float ms)
 {
-    _release = _convertToScalarMultiplier(milliseconds);
+    _release = _convertToScalarMultiplier(ms);
 }
 
 float EnvelopeFollower::_convertToScalarMultiplier(const float milliseconds) const
@@ -49,12 +42,12 @@ float EnvelopeFollower::_convertToScalarMultiplier(const float milliseconds) con
     return std::pow(0.01f, 1.0f / (milliseconds * _sampleRate * 0.001f));
 }
 
-float EnvelopeFollower::getAttack()
+float EnvelopeFollower::getAttack() const
 {
     return _attack;
 }
 
-float EnvelopeFollower::getRelease()
+float EnvelopeFollower::getRelease() const
 {
     return _release;
 }

@@ -31,13 +31,13 @@ void TransientShaper::update(const float attack, const float sustain)
     _sustain = sustain;
 }
 
-void TransientShaper::process(juce::AudioBuffer<float>& buffer, const int numSamples)
+void TransientShaper::process(juce::AudioBuffer<float>& buffer, const size_t numSamples)
 {
     float* leftChannel = buffer.getWritePointer(0);
     float* rightChannel = buffer.getWritePointer(1);
 
     // Transient processing
-    for (int i = 0; i < numSamples; ++i)
+    for (size_t i = 0; i < numSamples; ++i)
     {
         // Stereo-linked processing
         float controlSignal = (leftChannel[i] + rightChannel[i]) / 2.0f;

@@ -10,15 +10,14 @@
 class EnvelopeFollower
 {
 public:
-    EnvelopeFollower();
     void prepare(float sampleRate);
     float process(float sample);
 
-    void setAttack(float milliseconds);
-    void setRelease(float milliseconds);
+    void setAttack(float ms);
+    void setRelease(float ms);
 
-    float getAttack();
-    float getRelease();
+    [[nodiscard]] float getAttack() const;
+    [[nodiscard]] float getRelease() const;
 
 private:
     float _envelope {};
