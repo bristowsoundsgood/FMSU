@@ -8,23 +8,36 @@ void TextureLayer::prepare(const float sampleRate)
 {
     _envelopeFollower.prepare(sampleRate);
 
-    // TODO: Set as static variables
     _envelopeFollower.setAttack(0.0f);
     _envelopeFollower.setRelease(120.0f);
 }
 
 void TextureLayer::process(juce::AudioBuffer<float>& buffer, const size_t numSamples)
 {
-    const std::vector<float> noiseSamples = _generateNoiseSamples(numSamples);
+    const std::vector<float> noiseBuffer = _generateNoiseSamples(numSamples);
+
+    float* leftChannel = buffer.getWritePointer(0);
+    float* rightChannel = buffer.getWritePointer(1);
 
     for (size_t i = 0; i < numSamples; ++i)
     {
+        const float dryL = leftChannel[i];
+        const float dryR = rightChannel[i];
 
+        const float controlSignal = fabsf(leftChannel[i] + rightChannel[i] / 2.0f); // Rectifying signal enables contouring of the waveform
+
+        // Envelope modulates the volume of the white noise (i.e., the noise follows the contour of the waveform)
+
+        const float _envelope = _envelopeFollower.process(controlSignal);
+        const float noiseSample = noiseBuffer[i] * _envelope;
+
+        // Blend noise with original signal
+
+        constexpr float wetMix = 0.015f;
+
+        leftChannel[i] = dryL * (1.0f - wetMix) + noiseSample * (wetMix);
+        rightChannel[i] = dryR * (1.0f - wetMix) + noiseSample * (wetMix);
     }
-
-    // contour signal
-    // apply noise to envelope
-    // blend via. dry/wet
 }
 
 std::vector<float> TextureLayer::_generateNoiseSamples(const size_t numSamples) const
