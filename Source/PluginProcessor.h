@@ -7,6 +7,7 @@
 #include "DSP/Filter.h"
 #include "DSP/HardClipper.h"
 #include "DSP/SoftClipper.h"
+#include "DSP/StereoWidener.h"
 #include "DSP/TextureLayer.h"
 #include "DSP/TransientShaper.h"
 
@@ -53,13 +54,14 @@ public:
 private:
     juce::AudioProcessorValueTreeState _stateManager;
 
-    AutoGain autoGainUnit {};
-    TransientShaper transientShaper {};
-    SoftClipper softClipper {};
-    HardClipper hardClipper {};
-    TextureLayer textureLayer {};
+    AutoGain _autoGainUnit {};
+    TransientShaper _transientShaper {};
+    SoftClipper _softClipper {};
+    HardClipper _hardClipper {};
+    TextureLayer _textureLayer {};
+    StereoWidener _stereoWidener {};
 
-    Filter filter {};
+    Filter _filter {};
 
     PluginParameters _params;
     //==============================================================================

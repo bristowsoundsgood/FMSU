@@ -89,10 +89,10 @@ void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 {
     juce::ignoreUnused (sampleRate, samplesPerBlock);
 
-    transientShaper.prepare(static_cast<float>(sampleRate));
-    textureLayer.prepare(static_cast<float>(sampleRate), static_cast<size_t>(samplesPerBlock));
+    _transientShaper.prepare(static_cast<float>(sampleRate));
+    _textureLayer.prepare(static_cast<float>(sampleRate), static_cast<size_t>(samplesPerBlock));
 
-    filter.prepare(static_cast<float>(sampleRate));
+    _filter.prepare(static_cast<float>(sampleRate));
 }
 
 void AudioPluginAudioProcessor::releaseResources()
@@ -143,20 +143,23 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
     const float attack { _params.getAttack() };
     const float sustain { _params.getSustain() };
-    transientShaper.update(attack, sustain);
-    transientShaper.process(buffer, numSamples);
+    _transientShaper.update(attack, sustain);
+    _transientShaper.process(buffer, numSamples);
 
     const float softClipGain { _params.getSoftClipGain() };
-    softClipper.update(softClipGain);
-    softClipper.process(buffer, numSamples);
+    _softClipper.update(softClipGain);
+    _softClipper.process(buffer, numSamples);
 
-    // const float hardClipGain { _params.getSoftClipGain() };
-    // hardClipper.update(hardClipGain);
-    // hardClipper.process(buffer, numSamples);
+    // // const float hardClipGain { _params.getSoftClipGain() };
+    // // hardClipper.update(hardClipGain);
+    // // hardClipper.process(buffer, numSamples);
+    //
+    _textureLayer.process(buffer, numSamples);
 
-    textureLayer.process(buffer, numSamples);
+    const float widthCoefficient { _params.getWidthCoefficient() };
+    _stereoWidener.update(widthCoefficient);
+    _stereoWidener.process(buffer, numSamples);
 
-    // stereoWidth.process()
     // expansion.process()
 }
 

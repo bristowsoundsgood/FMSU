@@ -31,8 +31,14 @@ namespace PluginConfig
     constexpr float softClipGainMin { -24.0f };
     constexpr float softClipGainMax { 24.0f };
     constexpr float softClipGainDefault { 0.0f };
-    constexpr float softClipGainStep { 0.01f };
     const juce::NormalisableRange softClipGainRange { softClipGainMin, softClipGainMax, defaultStep };
+
+    const juce::ParameterID widthParamID { "stereoWidth", 1 };
+    const juce::String widthParamName { "stereoWidth" };
+    constexpr float widthMin { 0.0f };
+    constexpr float widthMax { 2.0f };
+    constexpr float widthDefault { 1.0f };
+    const juce::NormalisableRange widthRange { widthMin, widthMax, defaultStep };
 }
 
 class PluginParameters
@@ -44,12 +50,14 @@ public:
     float getSustain() const;
     float getSoftClipGain() const;
     float getFilterCutoff() const;
+    float getWidthCoefficient() const;
 
 private:
     juce::AudioParameterFloat* _attack;
     juce::AudioParameterFloat* _sustain;
     juce::AudioParameterFloat* _softClipGain;
     juce::AudioParameterFloat* _filterCutoff;
+    juce::AudioParameterFloat* _widthCoefficient;
 };
 
 

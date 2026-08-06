@@ -51,6 +51,8 @@ set(SourceFiles
         Source/DSP/TextureLayer.h
         Source/DSP/NoiseGenerator.cpp
         Source/DSP/NoiseGenerator.h
+        Source/DSP/StereoWidener.cpp
+        Source/DSP/StereoWidener.h
         Source/DSP/Filter.cpp
         Source/DSP/Filter.h
 )
