@@ -10,7 +10,6 @@ void TextureLayer::prepare(const float sampleRate, const size_t bufferSize)
     _envelopeFollower.setAttack(0.0f);
     _envelopeFollower.setRelease(120.0f);
 
-    _highPassFilter.prepare(sampleRate);
     _noiseGenerator.generateNoiseSamples(bufferSize);
 }
 
