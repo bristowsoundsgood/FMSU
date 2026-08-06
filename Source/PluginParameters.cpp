@@ -9,6 +9,7 @@ PluginParameters::PluginParameters(const juce::AudioProcessorValueTreeState& sta
     _attack = dynamic_cast<juce::AudioParameterFloat*>(stateManager.getParameter(PluginConfig::attackParamID.getParamID()));
     _sustain = dynamic_cast<juce::AudioParameterFloat*>(stateManager.getParameter(PluginConfig::sustainParamID.getParamID()));
     _softClipGain = dynamic_cast<juce::AudioParameterFloat*>(stateManager.getParameter(PluginConfig::softClipGainParamID.getParamID()));
+    _filterCutoff = dynamic_cast<juce::AudioParameterFloat*>(stateManager.getParameter("filterCutoff"));
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout PluginParameters::createParameterLayout()
@@ -23,7 +24,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout PluginParameters::createPara
                            PluginConfig::sustainRange, PluginConfig::sustainDefault),
 
         std::make_unique<juce::AudioParameterFloat>(PluginConfig::softClipGainParamID.getParamID(), PluginConfig::softClipGainParamName,
-                          PluginConfig::softClipGainRange, PluginConfig::softClipGainDefault)
+                          PluginConfig::softClipGainRange, PluginConfig::softClipGainDefault),
+
+        std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("filterCutoff", 1), "filterCutoff",
+                        juce::NormalisableRange(20.0f, 20000.0f, 1.0f), 2000.0f)
     );
 
     return layout;
@@ -42,6 +46,11 @@ float PluginParameters::getSustain() const
 float PluginParameters::getSoftClipGain() const
 {
     return _softClipGain->get();
+}
+
+float PluginParameters::getFilterCutoff() const
+{
+    return _filterCutoff->get();
 }
 
 

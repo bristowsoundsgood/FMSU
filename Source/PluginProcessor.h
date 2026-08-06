@@ -4,6 +4,7 @@
 
 #include "PluginParameters.h"
 #include "DSP/AutoGain.h"
+#include "DSP/Filter.h"
 #include "DSP/HardClipper.h"
 #include "DSP/SoftClipper.h"
 #include "DSP/TextureLayer.h"
@@ -57,6 +58,8 @@ private:
     SoftClipper softClipper {};
     HardClipper hardClipper {};
     TextureLayer textureLayer {};
+
+    Filter filter {};
 
     PluginParameters _params;
     //==============================================================================

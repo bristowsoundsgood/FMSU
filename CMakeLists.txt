@@ -27,7 +27,6 @@ CPMAddPackage(
     GIT_TAG origin/master
 )
 
-# Make sure you include any new source files here
 set(SourceFiles
         Source/PluginEditor.cpp
         Source/PluginEditor.h
@@ -35,6 +34,9 @@ set(SourceFiles
         Source/PluginProcessor.h
         Source/PluginParameters.cpp
         Source/PluginParameters.h
+        Source/Consts.h
+        Source/DataStructures/CircularBuffer.cpp
+        Source/DataStructures/CircularBuffer.h
         Source/DSP/EnvelopeFollower.cpp
         Source/DSP/EnvelopeFollower.h
         Source/DSP/TransientShaper.cpp
@@ -47,7 +49,10 @@ set(SourceFiles
         Source/DSP/AutoGain.h
         Source/DSP/TextureLayer.cpp
         Source/DSP/TextureLayer.h
-        Source/Consts.h
+        Source/DSP/NoiseGenerator.cpp
+        Source/DSP/NoiseGenerator.h
+        Source/DSP/Filter.cpp
+        Source/DSP/Filter.h
 )
 
 # Change these to your own preferences

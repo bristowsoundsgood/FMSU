@@ -43,11 +43,13 @@ public:
     float getAttack() const;
     float getSustain() const;
     float getSoftClipGain() const;
+    float getFilterCutoff() const;
 
 private:
     juce::AudioParameterFloat* _attack;
     juce::AudioParameterFloat* _sustain;
     juce::AudioParameterFloat* _softClipGain;
+    juce::AudioParameterFloat* _filterCutoff;
 };
 
 

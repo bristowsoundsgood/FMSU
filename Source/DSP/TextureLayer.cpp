@@ -4,18 +4,18 @@
 
 #include "TextureLayer.h"
 
-void TextureLayer::prepare(const float sampleRate)
+void TextureLayer::prepare(const float sampleRate, const size_t bufferSize)
 {
     _envelopeFollower.prepare(sampleRate);
-
     _envelopeFollower.setAttack(0.0f);
     _envelopeFollower.setRelease(120.0f);
+
+    _highPassFilter.prepare(sampleRate);
+    _noiseGenerator.generateNoiseSamples(bufferSize);
 }
 
 void TextureLayer::process(juce::AudioBuffer<float>& buffer, const size_t numSamples)
 {
-    const std::vector<float> noiseBuffer = _generateNoiseSamples(numSamples);
-
     float* leftChannel = buffer.getWritePointer(0);
     float* rightChannel = buffer.getWritePointer(1);
 
@@ -27,37 +27,16 @@ void TextureLayer::process(juce::AudioBuffer<float>& buffer, const size_t numSam
         const float controlSignal = fabsf(leftChannel[i] + rightChannel[i] / 2.0f); // Rectifying signal enables contouring of the waveform
 
         // Envelope modulates the volume of the white noise (i.e., the noise follows the contour of the waveform)
-
         const float _envelope = _envelopeFollower.process(controlSignal);
-        const float noiseSample = noiseBuffer[i] * _envelope;
+
+        const float noiseSample = _noiseGenerator.getRandomSample() * _envelope;
+
+        const float wetL = dryL * noiseSample;
+        const float wetR = dryR * noiseSample;
 
         // Blend noise with original signal
-
-        constexpr float wetMix = 0.015f;
-
-        leftChannel[i] = dryL * (1.0f - wetMix) + noiseSample * (wetMix);
-        rightChannel[i] = dryR * (1.0f - wetMix) + noiseSample * (wetMix);
+        constexpr float wetMix = 0.01f;
+        leftChannel[i] = dryL * (1.0f - wetMix) + wetL * (wetMix);
+        rightChannel[i] = dryR * (1.0f - wetMix) + wetR * (wetMix);
     }
-}
-
-std::vector<float> TextureLayer::_generateNoiseSamples(const size_t numSamples) const
-{
-    // Random number generator. Based on: https://github.com/hollance/synth-recipes/blob/main/recipes/white-noise.markdown
-
-    const long randomSeed = random();
-    std::linear_congruential_engine<std::uint_fast32_t, 196314165, 907633515, 0> rng{ static_cast<std::uint_fast32_t>(randomSeed) };
-
-    // For scaling generated numbers to the range [-1, 1]
-    constexpr float scale = (2.0f / static_cast<float>(rng.max() + 1.0f));
-
-    std::vector<float> buffer(numSamples);
-
-    for (size_t i = 0; i < numSamples; ++i)
-    {
-        const std::uint_fast32_t randomInt = rng();
-        const float randomFloat = (static_cast<float>(randomInt) * scale) - 1.0f;
-        buffer[i] = randomFloat;
-    }
-
-    return buffer;
 }
